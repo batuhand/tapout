@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tapout/home_page.dart';
+import 'package:tapout/pages.dart';
 
 import 'home_page.dart';
 
@@ -21,6 +22,7 @@ class _LoginState extends State<Login>{
     final username = TextFormField(
       controller: usernameController,
       keyboardType: TextInputType.text,
+      cursorColor: Colors.red,
       autofocus: true,
       decoration: InputDecoration(
         hintText: "Username",
@@ -75,7 +77,7 @@ class _LoginState extends State<Login>{
   loginControl(){
     Navigator.push(context,MaterialPageRoute(
     builder: (context) =>
-     new HomePage(username : usernameController.text.toString()))
+     new Pages(username : usernameController.text.toString()))
   );
   }
 
