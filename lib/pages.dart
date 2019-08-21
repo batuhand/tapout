@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:tapout/home_page.dart';
 import 'package:tapout/profile_page.dart';
@@ -28,12 +25,10 @@ class PagesState extends State<Pages>{
 
      final _pageOptions = [
     HomePage(username: widget.username),
-    ProfilePage(),
-    ProfilePage(),
+    ProfilePage(username: widget.username),
+    ProfilePage(username: widget.username),
   ];
  
-
-    print(widget.username);
     return MaterialApp(
       title: "tapout",
       home: Scaffold(
@@ -48,16 +43,16 @@ class PagesState extends State<Pages>{
           },
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.room_service),
-              title: Text("Your Tasks")
+              icon: Icon(Icons.room_service,color: Colors.red,),
+              title: Text("Your Tasks",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54))
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.offline_pin),
-              title: Text("Finished Tasks")
+              icon: Icon(Icons.offline_pin,color: Colors.red,),
+              title: Text("Finished Tasks",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54))
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text("Profile")
+              icon: Icon(Icons.person,color: Colors.red,),
+              title: Text("Profile",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54))
             ),
           ],
         ),

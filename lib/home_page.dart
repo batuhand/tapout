@@ -64,6 +64,7 @@ class HomePage extends StatelessWidget {
           );
         },
       ),
+      backgroundColor: Colors.red[500],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
             showDialog(
@@ -119,8 +120,8 @@ class HomePage extends StatelessWidget {
                   );
                 });
           },
-        child: Icon(Icons.loupe),
-        backgroundColor: Colors.red,
+        child: Icon(Icons.loupe,color: Colors.red,),
+        backgroundColor: Colors.white,
         ),
     );
  
@@ -148,10 +149,6 @@ createTask(String username, String taskName, String taskDesc){
 
 }
 
-addNew(String username){
-
-
-}
 
 class Tasks{
   int id;
