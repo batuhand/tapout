@@ -26,7 +26,6 @@ class HomePage extends StatelessWidget {
           unfinished.add(listOfTasks[i]);
         }
       }
-      print(listOfTasks[0].id);
 
       return unfinished;
     } else {
