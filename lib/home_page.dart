@@ -21,8 +21,8 @@ class HomePage extends StatelessWidget {
       }).toList();
 
       List<Tasks> unfinished = [];
-      for(int i=0; i<listOfTasks.length; i++){
-        if(listOfTasks[i].isCompleted == false){
+      for (int i = 0; i < listOfTasks.length; i++) {
+        if (listOfTasks[i].isCompleted == false) {
           unfinished.add(listOfTasks[i]);
         }
       }
@@ -47,7 +47,10 @@ class HomePage extends StatelessWidget {
         future: _fetchTasks(username),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+                    valueColor:
+                        new AlwaysStoppedAnimation<Color>(Colors.white)));
 
           return ListView(
             children: snapshot.data
@@ -63,6 +66,52 @@ class HomePage extends StatelessWidget {
                               builder: (context) => DetailScreen(todo: item),
                             ),
                           );
+                        },
+                        onLongPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Form(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Text(item.taskName),
+                                        Text(item.taskDesc),
+                                        RaisedButton(
+                                            color: Colors.redAccent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                            child: Text("Finish Task",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white)),
+                                            onPressed: () {
+                                              finishTask(item.id, item.taskName,
+                                                  item.taskDesc, item.taskUser);
+                                              Navigator.pop(context);
+                                            }),
+                                        RaisedButton(
+                                            color: Colors.redAccent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                            child: Text("Delete Task",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white)),
+                                            onPressed: () {
+                                              deleteTask(item.id);
+                                              Navigator.pop(context);
+                                            })
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
                         },
                       ),
                     ))
@@ -82,41 +131,56 @@ class HomePage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: newTaskNameController,
-                            keyboardType: TextInputType.text,
-                            cursorColor: Colors.red,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              hintText: "Task Name",
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(20, 10, 20, 10),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(32)),
-                            ),
-                          ),
-                        ),
+                            padding: EdgeInsets.all(8.0),
+                            child: Theme(
+                              data: new ThemeData(
+                                  primaryColor: Colors.red,
+                                  primaryColorDark: Colors.redAccent),
+                              child: TextFormField(
+                                controller: newTaskNameController,
+                                keyboardType: TextInputType.text,
+                                cursorColor: Colors.red,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  hintText: "Task Name",
+                                  contentPadding:
+                                      EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(32)),
+                                ),
+                              ),
+                            )),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: newTaskDescController,
-                            keyboardType: TextInputType.text,
-                            cursorColor: Colors.red,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              hintText: "Task Description",
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(20, 10, 20, 10),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(32)),
-                            ),
-                          ),
-                        ),
+                            padding: EdgeInsets.all(8.0),
+                            child: Theme(
+                              data: new ThemeData(
+                                  primaryColor: Colors.red,
+                                  primaryColorDark: Colors.redAccent),
+                              child: TextFormField(
+                                controller: newTaskDescController,
+                                keyboardType: TextInputType.text,
+                                cursorColor: Colors.red,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  hintText: "Task Description",
+                                  contentPadding:
+                                      EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(32)),
+                                ),
+                              ),
+                            )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: RaisedButton(
-                            child: Text("Create new Task"),
+                            color: Colors.redAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: Text("Create new Task",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
                             onPressed: () {
                               if (newTaskNameController.text != null &&
                                   newTaskDescController.text != null) {
@@ -124,6 +188,7 @@ class HomePage extends StatelessWidget {
                                     username,
                                     newTaskNameController.text.toString(),
                                     newTaskDescController.text.toString());
+                                Navigator.pop(context);
                               }
                             },
                           ),
@@ -156,10 +221,64 @@ createTask(String username, String taskName, String taskDesc) {
         body: body,
         headers: {"content-type": "application/json"}).then((response) {
       var result = json.decode(response.body);
-      //print(result["token"]);
       print("Creating");
       print(result);
     });
+  } catch (e) {
+    print("error");
+  }
+}
+
+finishTask(int id, String taskName, String taskDesc, String taskUser) {
+  var body = jsonEncode({
+    "id": id,
+    "taskName": taskName,
+    "taskDesc": taskDesc,
+    "isCompleted": true,
+    "taskUser": taskUser,
+  });
+
+  var uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + id.toString();
+
+  try {
+    http.put(uri,
+        body: body,
+        headers: {"content-type": "application/json"}).then((response) {
+      print("Finishing Task");
+    });
+  } catch (e) {
+    print("error");
+  }
+}
+
+
+rewokeTask(int id, String taskName, String taskDesc, String taskUser) {
+  var body = jsonEncode({
+    "id": id,
+    "taskName": taskName,
+    "taskDesc": taskDesc,
+    "isCompleted": false,
+    "taskUser": taskUser,
+  });
+
+  var uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + id.toString();
+
+  try {
+    http.put(uri,
+        body: body,
+        headers: {"content-type": "application/json"}).then((response) {
+      print("Finishing Task");
+    });
+  } catch (e) {
+    print("error");
+  }
+}
+
+deleteTask(int id) {
+  var uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + id.toString();
+  try {
+    http.delete(uri);
+    print("Deleting");
   } catch (e) {
     print("error");
   }

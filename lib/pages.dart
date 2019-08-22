@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapout/finished_tasks.dart';
 import 'package:tapout/home_page.dart';
 import 'package:tapout/profile_page.dart';
 
@@ -25,7 +26,7 @@ class PagesState extends State<Pages>{
 
      final _pageOptions = [
     HomePage(username: widget.username),
-    ProfilePage(username: widget.username),
+    Finished(username: widget.username),
     ProfilePage(username: widget.username),
   ];
  
