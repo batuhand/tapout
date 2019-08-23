@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tapout/pages.dart';
 import 'package:http/http.dart' as http;
 
@@ -218,7 +219,7 @@ class _LoginState extends State<Login> {
   }
 
   login(String username, String password) async {
-    String url = "https://tapoutapi.azurewebsites.net/api/user/";
+    String url = "https://tapoutapi2.azurewebsites.net/api/user/";
     url = url + username;
 
     try {
@@ -227,6 +228,7 @@ class _LoginState extends State<Login> {
       print(result[0]["password"].toString());
       String pass = result[0]["password"].toString();
       if (password == pass) {
+        _save(username);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -253,7 +255,7 @@ class _LoginState extends State<Login> {
     });
 
     try {
-      http.post("https://tapoutapi.azurewebsites.net/api/user",
+      http.post("https://tapoutapi2.azurewebsites.net/api/user",
           body: body, headers: {"content-type": "application/json"});
       print("Creating user");
       setState(() {
@@ -264,3 +266,20 @@ class _LoginState extends State<Login> {
     }
   }
 }
+
+      _read() async {
+        final prefs = await SharedPreferences.getInstance();
+        final key = 'rememberMe';
+        final value = prefs.getString(key) ?? "null";
+        print('read: $value');
+        return value;
+      }
+
+      _save(String username) async {
+        final prefs = await SharedPreferences.getInstance();
+        final key = 'rememberMe';
+        final value = username;
+        prefs.setString(key, value);
+        print('saved $value');
+      }
+    

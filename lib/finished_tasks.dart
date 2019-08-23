@@ -13,7 +13,7 @@ class Finished extends StatelessWidget {
   Finished({Key key, @required this.username}) : super(key: key);
 
   Future<List<Tasks>> _fetchTasks(String add) async {
-    final String uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + add;
+    final String uri = "https://tapoutapi2.azurewebsites.net/api/tasks/" + add;
     print(uri);
     var response = await http.get(uri);
     if (response.statusCode == 200) {
@@ -128,7 +128,7 @@ createTask(String username, String taskName, String taskDesc) {
     "taskDesc": taskDesc,
   });
 
-  var uri = "https://tapoutapi.azurewebsites.net/api/user/" + username;
+  var uri = "https://tapoutapi2.azurewebsites.net/api/user/" + username;
   try {
     http.put(uri,
         body: body,

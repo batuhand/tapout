@@ -71,7 +71,7 @@ class ProfilePage extends StatelessWidget {
 
 Future<User> getUser(String username) async {
   var result;
-  final String uri = "https://tapoutapi.azurewebsites.net/api/user/" + username;
+  final String uri = "https://tapoutapi2.azurewebsites.net/api/user/" + username;
   print(uri);
   var response = await http.get(uri);
   if (response.statusCode == 200) {

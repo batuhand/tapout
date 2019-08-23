@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key key, @required this.username}) : super(key: key);
 
   Future<List<Tasks>> _fetchTasks(String add) async {
-    final String uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + add;
+    final String uri = "https://tapoutapi2.azurewebsites.net/api/tasks/" + add;
     print(uri);
     var response = await http.get(uri);
     if (response.statusCode == 200) {
@@ -31,6 +31,7 @@ class HomePage extends StatelessWidget {
     } else {
       throw Exception("Failed to load internet");
     }
+
   }
 
   @override
@@ -214,7 +215,7 @@ createTask(String username, String taskName, String taskDesc) {
     "taskDesc": taskDesc,
   });
 
-  var uri = "https://tapoutapi.azurewebsites.net/api/user/" + username;
+  var uri = "https://tapoutapi2.azurewebsites.net/api/user/" + username;
   try {
     http.put(uri,
         body: body,
@@ -237,7 +238,7 @@ finishTask(int id, String taskName, String taskDesc, String taskUser) {
     "taskUser": taskUser,
   });
 
-  var uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + id.toString();
+  var uri = "https://tapoutapi2.azurewebsites.net/api/tasks/" + id.toString();
 
   try {
     http.put(uri,
@@ -260,7 +261,7 @@ rewokeTask(int id, String taskName, String taskDesc, String taskUser) {
     "taskUser": taskUser,
   });
 
-  var uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + id.toString();
+  var uri = "https://tapoutapi2.azurewebsites.net/api/tasks/" + id.toString();
 
   try {
     http.put(uri,
@@ -274,7 +275,7 @@ rewokeTask(int id, String taskName, String taskDesc, String taskUser) {
 }
 
 deleteTask(int id) {
-  var uri = "https://tapoutapi.azurewebsites.net/api/tasks/" + id.toString();
+  var uri = "https://tapoutapi2.azurewebsites.net/api/tasks/" + id.toString();
   try {
     http.delete(uri);
     print("Deleting");
